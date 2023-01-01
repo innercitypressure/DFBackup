@@ -1,5 +1,3 @@
-using DFBackup.Runner.Models;
-
 namespace DFBackup.Runner.Application;
 
 public static class GenerateBackup
@@ -15,23 +13,24 @@ public static class GenerateBackup
             return false;
         }
 
-
         var destination = "";
         
         if (!string.IsNullOrEmpty(fortressName))
         {
-            var checkFolder = Directory.Exists($"{settings.Destination}\\{fortressName}");
+            var attemptedDestination = $"{settings.Destination}\\{fortressName}\\{DateTime.Now:yyyyMMdd_hh:ss}"; 
+            
+            var checkFolder = Directory.Exists(attemptedDestination);
 
             if (checkFolder == false)
             {
-                Directory.CreateDirectory($"{settings.Destination}\\{fortressName}");
+                Directory.CreateDirectory(attemptedDestination);
             }
 
-            destination = $"{settings.Destination}\\{fortressName}";
+            destination = attemptedDestination;
         }
         else
         {
-            destination = settings.Destination;
+            destination = settings.Destination + $"\\{DateTime.Now:yyyyMMdd_hh:ss}";
         }
 
         try

@@ -1,6 +1,5 @@
 using System.Text;
 using System.Text.Json;
-using System.Text.Unicode;
 
 namespace DFBackup.Runner.Application;
 
