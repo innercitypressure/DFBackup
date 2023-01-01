@@ -80,4 +80,6 @@ public class Options
     public bool List { get; set; }
     [Option('b', "backup", Required = false, HelpText = "Create new backup")]
     public bool CreateBackup { get; set; }
+    [Option('r', "restore", Required = false, HelpText = "Restore most recent backup")]
+    public bool Restore { get; set; }
 }

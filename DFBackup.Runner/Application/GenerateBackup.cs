@@ -13,6 +13,12 @@ public static class GenerateBackup
             return false;
         }
 
+        if (settings.Source == null || settings.Destination == null)
+        {
+            Console.WriteLine("No source/destination found in settings.json");
+            return false;
+        }
+
         var destination = "";
         
         if (!string.IsNullOrEmpty(fortressName))
@@ -65,4 +71,3 @@ public static class GenerateBackup
         }
     }
 }
-
