@@ -48,9 +48,9 @@ public static class GenerateBackup
 
             return true;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine("Error creating backup {ex.Message}");
+            Console.WriteLine($"Error creating backup {ex.Message}");
         }
 
         return false;

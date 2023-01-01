@@ -1,8 +1,7 @@
 ﻿using CommandLine;
 using DFBackup.Runner.Application;
 
-Console.WriteLine("Dwarf Fortress Backup Manager");
-Console.WriteLine("-----------------------------");
+ColorConsole.WriteWrappedHeader("Dwarf Fortress Backup Manager");
 
 Parser.Default.ParseArguments<Options>(args)
     .WithParsed<Options>(o =>
@@ -71,7 +70,7 @@ public class Options
     [Option('a', "about", Required = false, HelpText = "About Dwarf Fortress Backup")]
     public bool About { get; set; }
     [Option(shortName: 'n', longName: "name", Required = false, HelpText = "Update Fortress name")]
-    public string FortressName { get; set; }
+    public string? FortressName { get; set; }
     [Option('c', "clean", Required = false, HelpText = "Delete saves older than 7 days")]
     public bool Clean { get; set; }
     [Option('v', "validate", Required = false, HelpText = "Validate settings.json file")]
