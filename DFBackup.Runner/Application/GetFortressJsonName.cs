@@ -1,4 +1,5 @@
 using System.Text.Json;
+using DFBackup.Runner.Models;
 
 namespace DFBackup.Runner.Application;
 
@@ -8,8 +9,8 @@ public static class GetFortressJsonName
     {
         try
         {
-            var fortressJson = File.ReadAllText($"{AppDomain.CurrentDomain.BaseDirectory}fortress.json");
-            var fortress = JsonSerializer.Deserialize<Fortress>(fortressJson) ?? null;
+            var fortressJson = File.ReadAllText($"{AppDomain.CurrentDomain.BaseDirectory}settings.json");
+            var fortress = JsonSerializer.Deserialize<Settings>(fortressJson) ?? null;
 
             if (!string.IsNullOrWhiteSpace(fortress?.FortressName))
             {
@@ -18,7 +19,7 @@ public static class GetFortressJsonName
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Exception finding fortress name {e.Message}");
+            ColorConsole.WriteError($"Exception finding fortress name {e.Message}");
         }
         
         return "No fortress name was found.";

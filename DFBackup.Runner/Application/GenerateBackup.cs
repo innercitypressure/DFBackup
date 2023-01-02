@@ -1,3 +1,6 @@
+using System.Text.Json;
+using DFBackup.Runner.Models;
+
 namespace DFBackup.Runner.Application;
 
 public static class GenerateBackup
@@ -9,13 +12,13 @@ public static class GenerateBackup
 
         if (settings == null)
         {
-            Console.WriteLine("No settings.json file could be found/parsed");
+            ColorConsole.WriteError("No settings.json file could be found/parsed");
             return false;
         }
 
         if (settings.Source == null || settings.Destination == null)
         {
-            Console.WriteLine("No source/destination found in settings.json");
+            ColorConsole.WriteError("No source/destination found in settings.json");
             return false;
         }
 
@@ -45,12 +48,23 @@ public static class GenerateBackup
             {
                 CloneDirectory(settings.Source, destination);
             }
+            
+            // Update LastBackupPath
+            var jsonContents = File.ReadAllText($"{AppDomain.CurrentDomain.BaseDirectory}settings.json");
+
+            var settingsJson = JsonSerializer.Deserialize<Settings>(jsonContents) ?? new Settings();
+
+            settings.LastBackupPath = destination;
+            
+            var jsonString = JsonSerializer.Serialize(settingsJson, new JsonSerializerOptions { WriteIndented = true });
+
+            File.WriteAllText($"{AppDomain.CurrentDomain.BaseDirectory}settings.json", jsonString);
 
             return true;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error creating backup {ex.Message}");
+            ColorConsole.WriteError($"Error creating backup {ex.Message}");
         }
 
         return false;
