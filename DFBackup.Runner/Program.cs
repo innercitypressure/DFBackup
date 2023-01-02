@@ -1,21 +1,20 @@
 ﻿using CommandLine;
 using DFBackup.Runner.Application;
 
-Console.WriteLine("Dwarf Fortress Backup Manager");
-Console.WriteLine("-----------------------------");
-
 Parser.Default.ParseArguments<Options>(args)
     .WithParsed<Options>(o =>
     {
+        ColorConsole.WriteWrappedHeader("Dwarf Fortress Backup Manager");
+        
         if (o.About)
         {
-            Console.WriteLine($"Dwarf Fortress Backup Version {GetAssemblyVersion.Display()}");
-            Console.WriteLine("-- Repo:");
+            ColorConsole.WriteInfo($"Dwarf Fortress Backup Version {GetAssemblyVersion.Display()}");
+            ColorConsole.WriteInfo("- Repo: https://github.com/innercitypressure/DFBackup");
         }
 
         if (o.Validate)
         {
-            Console.WriteLine("Validating settings.json....");
+            ColorConsole.WriteInfo("Validating settings.json....");
 
             var validationResults = ValidateSettings.Check();
 
@@ -26,42 +25,43 @@ Parser.Default.ParseArguments<Options>(args)
 
             if (!validationResults.ValidFile)
             {
-                Console.WriteLine($"{Environment.NewLine}Settings.json file is NOT valid.");
+                ColorConsole.WriteError($"{Environment.NewLine}Settings.json file is NOT valid.");
             }
             else
             {
-                Console.WriteLine($"{Environment.NewLine}Settings.json file is valid");
+                ColorConsole.WriteSuccess($"{Environment.NewLine}Settings.json file is valid");
             }
         }
 
         if (!string.IsNullOrWhiteSpace(o.FortressName))
         {
             var result = WriteFortressName.Write(o.FortressName);
+            
             if (result)
             {
-                Console.WriteLine($"Fortress name updated to {o.FortressName}");
+                ColorConsole.WriteSuccess($"Fortress name updated to {o.FortressName}");
             }
             else
             {
-                Console.WriteLine("Fortress name was not updated.");   
+                ColorConsole.WriteError("Fortress name was not updated.");   
             }
         }
         
         if (o.List)
         {
             var fortressName = GetFortressJsonName.Get();
-            Console.WriteLine($"Fortress name found: {fortressName}");
+            ColorConsole.WriteInfo($"Fortress name: {fortressName}");
         }
 
         if (o.CreateBackup)
         {
             if (GenerateBackup.Run())
             {
-                Console.WriteLine("Backup created"); 
+                ColorConsole.WriteSuccess("Backup created"); 
             }
             else
             {
-                Console.WriteLine("Error creating backup");
+                ColorConsole.WriteError("Error creating backup");
             }
         }
     });
@@ -71,7 +71,7 @@ public class Options
     [Option('a', "about", Required = false, HelpText = "About Dwarf Fortress Backup")]
     public bool About { get; set; }
     [Option(shortName: 'n', longName: "name", Required = false, HelpText = "Update Fortress name")]
-    public string FortressName { get; set; }
+    public string? FortressName { get; set; }
     [Option('c', "clean", Required = false, HelpText = "Delete saves older than 7 days")]
     public bool Clean { get; set; }
     [Option('v', "validate", Required = false, HelpText = "Validate settings.json file")]
@@ -80,4 +80,6 @@ public class Options
     public bool List { get; set; }
     [Option('b', "backup", Required = false, HelpText = "Create new backup")]
     public bool CreateBackup { get; set; }
+    [Option('r', "restore", Required = false, HelpText = "Restore most recent backup")]
+    public bool Restore { get; set; }
 }
