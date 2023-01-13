@@ -5,7 +5,7 @@ namespace DFBackup.Runner.Application;
 
 public static class GenerateBackup
 {
-    public static bool Run()
+    public static bool Run(string BackupName = "")
     {
         var fortressName = GetFortressJsonName.Get() ?? null;
         var settings = GetSettingsJson.Get() ?? null;
@@ -26,7 +26,12 @@ public static class GenerateBackup
         
         if (!string.IsNullOrEmpty(fortressName))
         {
-            var attemptedDestination = $"{settings.Destination}\\{fortressName}\\{DateTime.Now:yyyyMMdd_hh:ss}"; 
+            var attemptedDestination = $"{settings.Destination}\\{fortressName}\\{DateTime.Now:yyyyMMdd_hh:ss}";
+
+            if (!string.IsNullOrWhiteSpace(BackupName))
+            {
+                attemptedDestination += BackupName;
+            }
             
             var checkFolder = Directory.Exists(attemptedDestination);
 
