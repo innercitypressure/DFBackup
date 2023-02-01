@@ -26,11 +26,11 @@ public static class GenerateBackup
         
         if (!string.IsNullOrEmpty(fortressName))
         {
-            var attemptedDestination = $"{settings.Destination}\\{fortressName}\\{DateTime.Now:yyyyMMdd_hh:ss}";
+            var attemptedDestination = $"{settings.Destination}\\{fortressName}\\{DateTime.Now:yyyyMMdd_hhss}";
 
             if (!string.IsNullOrWhiteSpace(BackupName))
             {
-                attemptedDestination += BackupName;
+                attemptedDestination += $"-{BackupName}";
             }
             
             var checkFolder = Directory.Exists(attemptedDestination);
@@ -49,10 +49,7 @@ public static class GenerateBackup
 
         try
         {
-            foreach (var directory in Directory.GetDirectories(settings.Source))
-            {
-                CloneDirectory(settings.Source, destination);
-            }
+            CloneDirectory(settings.Source, destination);
             
             // Update LastBackupPath
             var jsonContents = File.ReadAllText($"{AppDomain.CurrentDomain.BaseDirectory}settings.json");

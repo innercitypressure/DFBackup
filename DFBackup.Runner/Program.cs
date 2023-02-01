@@ -55,13 +55,21 @@ Parser.Default.ParseArguments<Options>(args)
 
         if (o.CreateBackup)
         {
-            if (GenerateBackup.Run(o.BackupName ?? string.Empty))
+            try
             {
-                ColorConsole.WriteSuccess("Backup created"); 
+
+                if (GenerateBackup.Run(o.BackupName ?? string.Empty))
+                {
+                    ColorConsole.WriteSuccess("Backup created");
+                }
+                else
+                {
+                    ColorConsole.WriteError("Error creating backup");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ColorConsole.WriteError("Error creating backup");
+                throw new Exception($"Exception: {ex.Message}");
             }
         }
     });
@@ -79,8 +87,8 @@ public class Options
     [Option('l', "list", Required = false, HelpText = "Current Fortress name")]
     public bool List { get; set; }
     [Option('b', "backup", Required = false, HelpText = "Create new backup")]
-    public string? BackupName { get; set; }
     public bool CreateBackup { get; set; }
+    public string? BackupName { get; set; }
     [Option('r', "restore", Required = false, HelpText = "Restore most recent backup")]
     public bool Restore { get; set; }
 }
