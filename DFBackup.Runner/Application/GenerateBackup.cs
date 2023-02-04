@@ -26,7 +26,7 @@ public static class GenerateBackup
         
         if (!string.IsNullOrEmpty(fortressName))
         {
-            var attemptedDestination = $"{settings.Destination}\\{fortressName}\\{DateTime.Now:yyyyMMdd_hhss}";
+            var attemptedDestination = $"{settings.Destination}\\{fortressName}\\{DateTime.Now:yyyyMMdd_hhmmss}";
 
             if (!string.IsNullOrWhiteSpace(BackupName))
             {
@@ -44,7 +44,7 @@ public static class GenerateBackup
         }
         else
         {
-            destination = settings.Destination + $"\\{DateTime.Now:yyyyMMdd_hh:ss}";
+            destination = settings.Destination + $"\\{DateTime.Now:yyyyMMdd_hhmmss}";
         }
 
         try
