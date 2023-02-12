@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using DFBackup.Runner.Application.Services;
 using DFBackup.Runner.Models;
 
 namespace DFBackup.Runner.Application;
@@ -12,14 +13,8 @@ public static class WriteFortressName
         {
             WriteIndented = true,
         };
-
-        HashSet<char> removeChars = new HashSet<char>(" ?&^$#@!()+-,:;<>’\'-_*");
-        StringBuilder result = new StringBuilder(fortressName.Length);
-        foreach (char c in fortressName)
-            if (!removeChars.Contains(c)) // prevent dirty chars
-                result.Append(c);
-      
-        var strippedFortressName = result.ToString();
+        
+        var strippedFortressName = CleanDirectoryNameInput.Clean(fortressName);
 
         var jsonContents = File.ReadAllText($"{AppDomain.CurrentDomain.BaseDirectory}settings.json");
 

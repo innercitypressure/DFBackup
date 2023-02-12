@@ -33,7 +33,7 @@ Parser.Default.ParseArguments<Options>(args)
             }
         }
 
-        if (!string.IsNullOrWhiteSpace(o.FortressName))
+        if (!string.IsNullOrEmpty(o.FortressName))
         {
             var result = WriteFortressName.Write(o.FortressName);
             
@@ -53,11 +53,10 @@ Parser.Default.ParseArguments<Options>(args)
             ColorConsole.WriteInfo($"Fortress name: {fortressName}");
         }
 
-        if (o.CreateBackup)
+        if (!string.IsNullOrWhiteSpace(o.BackupName))
         {
             try
             {
-
                 if (GenerateBackup.Run(o.BackupName ?? string.Empty))
                 {
                     ColorConsole.WriteSuccess("Backup created");
@@ -86,9 +85,9 @@ public class Options
     public bool Validate { get; set; }
     [Option('l', "list", Required = false, HelpText = "Current Fortress name")]
     public bool List { get; set; }
+
     [Option('b', "backup", Required = false, HelpText = "Create new backup")]
-    public bool CreateBackup { get; set; }
-    public string? BackupName { get; set; }
+    public string BackupName { get; set; } = " ";
     [Option('r', "restore", Required = false, HelpText = "Restore most recent backup")]
     public bool Restore { get; set; }
 }

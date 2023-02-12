@@ -1,13 +1,14 @@
 using System.Text.Json;
+using DFBackup.Runner.Application.Services;
 using DFBackup.Runner.Models;
 
 namespace DFBackup.Runner.Application;
 
 public static class GenerateBackup
 {
-    public static bool Run(string BackupName = "")
+    public static bool Run(string backupName = "")
     {
-        var fortressName = GetFortressJsonName.Get() ?? null;
+        var fortressName = GetFortressJsonName.Get() ?? string.Empty;
         var settings = GetSettingsJson.Get() ?? null;
 
         if (settings == null)
@@ -23,14 +24,17 @@ public static class GenerateBackup
         }
 
         var destination = "";
+        var backupTime = $"{DateTime.Now:yyyyMMdd_hhmmss}";
         
         if (!string.IsNullOrEmpty(fortressName))
         {
-            var attemptedDestination = $"{settings.Destination}\\{fortressName}\\{DateTime.Now:yyyyMMdd_hhmmss}";
+            var attemptedDestination = $"{settings.Destination}\\{fortressName}\\{backupTime}";
 
-            if (!string.IsNullOrWhiteSpace(BackupName))
+            if (!string.IsNullOrWhiteSpace(backupName))
             {
-                attemptedDestination += $"-{BackupName}";
+                var parsedBackupName = CleanDirectoryNameInput.Clean(backupName);
+                
+                attemptedDestination += $"_{parsedBackupName}";
             }
             
             var checkFolder = Directory.Exists(attemptedDestination);
@@ -44,7 +48,7 @@ public static class GenerateBackup
         }
         else
         {
-            destination = settings.Destination + $"\\{DateTime.Now:yyyyMMdd_hhmmss}";
+            destination = settings.Destination + $"\\{backupTime}";
         }
 
         try
