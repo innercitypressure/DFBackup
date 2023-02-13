@@ -11,6 +11,11 @@ public static class GenerateBackup
         var fortressName = GetFortressJsonName.Get() ?? string.Empty;
         var settings = GetSettingsJson.Get() ?? null;
 
+        if (string.IsNullOrEmpty(backupName))
+        {
+            backupName = string.Empty;
+        }
+        
         if (settings == null)
         {
             ColorConsole.WriteError("No settings.json file could be found/parsed");

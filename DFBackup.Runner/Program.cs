@@ -5,7 +5,7 @@ Parser.Default.ParseArguments<Options>(args)
     .WithParsed<Options>(o =>
     {
         ColorConsole.WriteWrappedHeader("Dwarf Fortress Backup Manager");
-        
+
         if (o.About)
         {
             ColorConsole.WriteInfo($"Dwarf Fortress Backup Version {GetAssemblyVersion.Display()}");
@@ -36,34 +36,43 @@ Parser.Default.ParseArguments<Options>(args)
         if (!string.IsNullOrEmpty(o.FortressName))
         {
             var result = WriteFortressName.Write(o.FortressName);
-            
+
             if (result)
             {
                 ColorConsole.WriteSuccess($"Fortress name updated to {o.FortressName}");
             }
             else
             {
-                ColorConsole.WriteError("Fortress name was not updated.");   
+                ColorConsole.WriteError("Fortress name was not updated.");
             }
         }
-        
+
         if (o.List)
         {
             var fortressName = GetFortressJsonName.Get();
             ColorConsole.WriteInfo($"Fortress name: {fortressName}");
         }
 
-        if (!string.IsNullOrWhiteSpace(o.BackupName))
+        if (o.Backup)
         {
             try
             {
-                if (GenerateBackup.Run(o.BackupName ?? string.Empty))
+                var fortressDescription = string.Empty;
+                
+                if (args.Length > 1)
                 {
-                    ColorConsole.WriteSuccess("Backup created");
+                    fortressDescription = args[1];
+                }
+                
+                // ColorConsole.WriteInfo($"Backup: {o.Backup}, {fortressDescription}");
+                
+                if (GenerateBackup.Run(fortressDescription))
+                {
+                     ColorConsole.WriteSuccess("Backup created");
                 }
                 else
                 {
-                    ColorConsole.WriteError("Error creating backup");
+                     ColorConsole.WriteError("Error creating backup");
                 }
             }
             catch (Exception ex)
@@ -85,9 +94,8 @@ public class Options
     public bool Validate { get; set; }
     [Option('l', "list", Required = false, HelpText = "Current Fortress name")]
     public bool List { get; set; }
-
-    [Option('b', "backup", Required = false, HelpText = "Create new backup")]
-    public string BackupName { get; set; } = " ";
     [Option('r', "restore", Required = false, HelpText = "Restore most recent backup")]
     public bool Restore { get; set; }
+    [Option('b', "backup", Required = false, HelpText = "Create new backup")]
+    public bool Backup { get; set; }
 }
