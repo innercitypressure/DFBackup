@@ -6,12 +6,12 @@ namespace DFBackup.Runner.Application;
 
 public static class GenerateBackup
 {
-    public static bool Run(string backupName = "default")
+    public static bool Run(string backupName = "")
     {
         var fortressName = GetFortressJsonName.Get() ?? string.Empty;
         var settings = GetSettingsJson.Get() ?? null;
 
-        if (backupName == "default")
+        if (string.IsNullOrEmpty(backupName))
         {
             backupName = string.Empty;
         }
