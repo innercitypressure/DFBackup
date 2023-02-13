@@ -55,11 +55,9 @@ Parser.Default.ParseArguments<Options>(args)
 
         if (!string.IsNullOrWhiteSpace(o.BackupName))
         {
-            ColorConsole.WriteInfo($"Backup name found {o.BackupName}");
-            
-            /*try
+            try
             {
-                if (GenerateBackup.Run(o.BackupName ?? string.Empty))
+                if (GenerateBackup.Run(o.BackupName ?? "default"))
                 {
                     ColorConsole.WriteSuccess("Backup created");
                 }
@@ -71,7 +69,7 @@ Parser.Default.ParseArguments<Options>(args)
             catch (Exception ex)
             {
                 throw new Exception($"Exception: {ex.Message}");
-            }*/
+            }
         }
     });
 
