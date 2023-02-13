@@ -5,7 +5,7 @@ Parser.Default.ParseArguments<Options>(args)
     .WithParsed<Options>(o =>
     {
         ColorConsole.WriteWrappedHeader("Dwarf Fortress Backup Manager");
-        
+
         if (o.About)
         {
             ColorConsole.WriteInfo($"Dwarf Fortress Backup Version {GetAssemblyVersion.Display()}");
@@ -36,17 +36,17 @@ Parser.Default.ParseArguments<Options>(args)
         if (!string.IsNullOrEmpty(o.FortressName))
         {
             var result = WriteFortressName.Write(o.FortressName);
-            
+
             if (result)
             {
                 ColorConsole.WriteSuccess($"Fortress name updated to {o.FortressName}");
             }
             else
             {
-                ColorConsole.WriteError("Fortress name was not updated.");   
+                ColorConsole.WriteError("Fortress name was not updated.");
             }
         }
-        
+
         if (o.List)
         {
             var fortressName = GetFortressJsonName.Get();
@@ -55,7 +55,9 @@ Parser.Default.ParseArguments<Options>(args)
 
         if (!string.IsNullOrWhiteSpace(o.BackupName))
         {
-            try
+            ColorConsole.WriteInfo($"Backup name found {o.BackupName}");
+            
+            /*try
             {
                 if (GenerateBackup.Run(o.BackupName ?? string.Empty))
                 {
@@ -69,7 +71,7 @@ Parser.Default.ParseArguments<Options>(args)
             catch (Exception ex)
             {
                 throw new Exception($"Exception: {ex.Message}");
-            }
+            }*/
         }
     });
 
@@ -85,9 +87,8 @@ public class Options
     public bool Validate { get; set; }
     [Option('l', "list", Required = false, HelpText = "Current Fortress name")]
     public bool List { get; set; }
-
-    [Option('b', "backup", Required = false, HelpText = "Create new backup")]
-    public string BackupName { get; set; } = " ";
     [Option('r', "restore", Required = false, HelpText = "Restore most recent backup")]
     public bool Restore { get; set; }
+    [Option('b', "backup", Required = false, HelpText = "Create new backup")]
+    public string BackupName { get; set; } = "default";
 }

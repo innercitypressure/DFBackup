@@ -6,11 +6,16 @@ namespace DFBackup.Runner.Application;
 
 public static class GenerateBackup
 {
-    public static bool Run(string backupName = "")
+    public static bool Run(string backupName = "default")
     {
         var fortressName = GetFortressJsonName.Get() ?? string.Empty;
         var settings = GetSettingsJson.Get() ?? null;
 
+        if (backupName == "default")
+        {
+            backupName = string.Empty;
+        }
+        
         if (settings == null)
         {
             ColorConsole.WriteError("No settings.json file could be found/parsed");
