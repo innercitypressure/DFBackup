@@ -22,6 +22,6 @@ public static class GetFortressJsonName
             ColorConsole.WriteError($"Exception finding fortress name {e.Message}");
         }
         
-        return "No fortress name was found.";
+        return string.Empty;
     }
 }

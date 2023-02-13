@@ -64,7 +64,7 @@ Parser.Default.ParseArguments<Options>(args)
                     fortressDescription = args[1];
                 }
                 
-                ColorConsole.WriteInfo($"Backup: {o.Backup}, {fortressDescription}");
+                // ColorConsole.WriteInfo($"Backup: {o.Backup}, {fortressDescription}");
                 
                 if (GenerateBackup.Run(fortressDescription))
                 {
